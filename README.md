@@ -6,9 +6,9 @@ O desafio consiste em criar uma tela para celular mostrando as **informações n
 Durante o desenvolvimento você pode ir além do proposto, utilizando sua criatividade para expandir e melhorar a aplicação.  
 
 ---
-<img width="280" height="636" alt="image" src="https://github.com/user-attachments/assets/188388a4-3693-4f3a-8b55-111ac31b45ee" />
-<img width="280" height="639" alt="image" src="https://github.com/user-attachments/assets/f223b341-db3b-4265-919a-13dad2c93a1c" />
-<img width="289" height="625" alt="image" src="https://github.com/user-attachments/assets/b3c47fea-7a34-473e-a642-60fb49f2fb81" />
+<img width="240" height="536" alt="image" src="https://github.com/user-attachments/assets/188388a4-3693-4f3a-8b55-111ac31b45ee" />
+<img width="240" height="539" alt="image" src="https://github.com/user-attachments/assets/f223b341-db3b-4265-919a-13dad2c93a1c" />
+<img width="249" height="535" alt="image" src="https://github.com/user-attachments/assets/b3c47fea-7a34-473e-a642-60fb49f2fb81" />
 
 
 
