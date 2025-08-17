@@ -21,4 +21,6 @@
     <string name="energia">Energia</string>
     <string name="porcao_total">Porção total</string>
     <string name="valor_nutrient">%1$s %2$s</string>
+    <string name="saude_em_foco">Saúde em foco</string>
+    <string name="tabela_nutricional">Tabela nutricional</string>
 </resources>

@@ -21,24 +21,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.rocketseat.tabelanutricional.R
+import com.rocketseat.tabelanutricional.data.model.WellnessNews
+import com.rocketseat.tabelanutricional.data.model.WellnessNewsTag
 import com.rocketseat.tabelanutricional.ui.theme.TabelaNutricionalTheme
 import com.rocketseat.tabelanutricional.ui.theme.TabelaNutricionalTheme.sizing
 import com.rocketseat.tabelanutricional.ui.theme.Typography
+import java.util.UUID
 
-enum class WellnessNewsTag(
-    val description: String
-) {
-    WELLNESS(description = "Bem-estar"),
-    NUTRITION(description = "Nutrição"),
-    FOOD_EDUCATION(description = "Educação alimentar")
-}
-
-data class WellnessNews(
-    val title: String,
-    @DrawableRes val imageRes: Int,
-    val readTimeInMinutes: Int,
-    val tags: List<WellnessNewsTag>
-)
 
 @Composable
 fun WellnessNewsCard(
@@ -80,8 +69,8 @@ fun WellnessNewsCard(
             modifier = Modifier.padding(top = sizing.md),
             text = wellnessNews.title,
             style = Typography.titleSmall,
-            minLines = 3,
-            maxLines = 3,
+            minLines = 4,
+            maxLines = 4,
             overflow = TextOverflow.Ellipsis
         )
 
