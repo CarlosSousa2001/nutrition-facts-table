@@ -38,7 +38,7 @@ fun TabelaNutricionalTheme(
     sizing: Sizing = Sizing(),
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     //val sizing = if (darkTheme) Sizing(sm = 56.dp) else sizing

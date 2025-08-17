@@ -23,4 +23,8 @@
     <string name="valor_nutrient">%1$s %2$s</string>
     <string name="saude_em_foco">Saúde em foco</string>
     <string name="tabela_nutricional">Tabela nutricional</string>
+    <string name="proteinas">Proteínas</string>
+    <string name="carboidratos">Carboidratos</string>
+    <string name="gorduras">Gorduras</string>
+    <string name="acucar">Açúcar</string>
 </resources>
