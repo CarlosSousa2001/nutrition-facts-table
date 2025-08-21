@@ -1,5 +1,9 @@
 package com.rocketseat.tabelanutricional.ui.screen.healthy_recipe_details
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,13 +20,21 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,15 +48,55 @@ import com.rocketseat.tabelanutricional.ui.component.LoveButton
 import com.rocketseat.tabelanutricional.ui.component.PrimaryButton
 import com.rocketseat.tabelanutricional.ui.component.healthy_recipe_details.HealthyRecipeMainInfo
 import com.rocketseat.tabelanutricional.ui.component.healthy_recipe_details.HealthyRecipeNutrientBar
+import com.rocketseat.tabelanutricional.ui.screen.healthyRecipe_more_details.HealthyRecipeMoreDetails
 import com.rocketseat.tabelanutricional.ui.theme.Primary
 import com.rocketseat.tabelanutricional.ui.theme.TabelaNutricionalTheme
 import com.rocketseat.tabelanutricional.ui.theme.TabelaNutricionalTheme.sizing
+import kotlinx.coroutines.launch
 
+private const val MAX_NUTRIENT_BAR_VALUE = 35f
+private const val HEALTHY_RECIPE_IMAGE_SCALE = 1.2f
+private const val HEALTHY_RECIPE_IMAGE_ROTATION = 360f
+private const val HEALTHY_RECIPE_IMAGE_ANIMATION_DURATION_IN_MILLIS = 1000
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HealthyRecipeDetailsScreen(
     modifier: Modifier = Modifier,
-    healthyRecipe: HealthyRecipe
+    healthyRecipe: HealthyRecipe,
+    onNavigateBack: () -> Unit,
+    onClickFavorite: (isSelected: Boolean) -> Unit = {}
 ) {
+    var isImageVisible by remember { mutableStateOf(true) }
+    val scale = remember { Animatable(initialValue = 0f) }
+    val rotation = remember { Animatable(initialValue = 0f) }
+
+    var showMoreDetails by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val moreDetailsSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    LaunchedEffect(key1 = Unit) {
+        isImageVisible = true
+
+        scale.animateTo(
+            targetValue = HEALTHY_RECIPE_IMAGE_SCALE,
+            animationSpec = tween(
+                durationMillis = HEALTHY_RECIPE_IMAGE_ANIMATION_DURATION_IN_MILLIS,
+                easing = LinearEasing
+            )
+        )
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        rotation.animateTo(
+            targetValue = HEALTHY_RECIPE_IMAGE_ROTATION,
+            animationSpec = tween(
+                durationMillis = HEALTHY_RECIPE_IMAGE_ANIMATION_DURATION_IN_MILLIS,
+                easing = FastOutSlowInEasing
+            )
+        )
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -67,7 +119,9 @@ fun HealthyRecipeDetailsScreen(
                         shape = CircleShape,
                         spotColor = Primary
                     ),
-                    onClick = {}
+                    onClick = {
+                        onNavigateBack()
+                    }
                 )
                 LoveButton(
                     modifier = Modifier.shadow(
@@ -75,79 +129,117 @@ fun HealthyRecipeDetailsScreen(
                         shape = CircleShape,
                         spotColor = Primary
                     ),
-                    onClick = {}
+                    onClick = { isSelected ->
+                        onClickFavorite(isSelected)
+                    }
                 )
             }
 
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
-                    .scale(1.2f),
-                painter = painterResource(id = R.drawable.img_dish_with_shadow),
-                contentScale = ContentScale.FillWidth,
-                contentDescription = stringResource(id = R.string.imagem_item_tabela_nutricional)
-            )
+            if (isImageVisible) {
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .graphicsLayer {
+                            scaleX = scale.value
+                            scaleY = scale.value
+                            rotationZ = rotation.value
+                        }
+                        .align(Alignment.CenterHorizontally),
+                    painter = painterResource(id = R.drawable.img_dish_with_shadow),
+                    contentScale = ContentScale.FillWidth,
+                    contentDescription = stringResource(id = R.string.imagem_item_tabela_nutricional)
+                )
+            }
 
             HealthyRecipeMainInfo(
                 recipeName = healthyRecipe.name,
-                calories = healthyRecipe.calories,
+                calories = healthyRecipe.calories.value,
                 totalPortionInGrams = healthyRecipe.totalPortionInGrams
             )
-            Spacer(modifier = Modifier.height(sizing.sm))
+
             HealthyRecipeNutrientBarList(
                 modifier = Modifier.padding(horizontal = sizing.md),
                 healthyRecipe = healthyRecipe
             )
+
             Spacer(modifier = Modifier.height(sizing.sm))
+
             PrimaryButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(sizing.x3l)
                     .padding(horizontal = sizing.md),
                 text = stringResource(R.string.mais_detalhes),
-                onClick = {}
+                onClick = {
+                    showMoreDetails = true
+                }
             )
         }
-
-
         Box(
             modifier = Modifier
                 .zIndex(-1f)
                 .align(Alignment.BottomStart)
-                .clip(RoundedCornerShape(topStart = sizing.xl, topEnd = sizing.xl))
+                .clip(
+                    RoundedCornerShape(
+                        topStart = sizing.xl,
+                        topEnd = sizing.xl
+                    )
+                )
                 .background(MaterialTheme.colorScheme.surface)
                 .fillMaxWidth()
                 .fillMaxHeight(0.8f)
         )
+
+        if (showMoreDetails) {
+            LaunchedEffect(moreDetailsSheetState) {
+                moreDetailsSheetState.show()
+            }
+
+            HealthyRecipeMoreDetails(
+                sheetState = moreDetailsSheetState,
+                healthyRecipe = healthyRecipe,
+                onDismiss = {
+                    coroutineScope.launch {
+                        moreDetailsSheetState.hide()
+                    }.invokeOnCompletion {
+                        if (!moreDetailsSheetState.isVisible) {
+                            showMoreDetails = false
+                        }
+                    }
+                }
+            )
+        }
     }
 }
 
 @Composable
-fun HealthyRecipeNutrientBarList(modifier: Modifier, healthyRecipe: HealthyRecipe) {
+private fun HealthyRecipeNutrientBarList(
+    modifier: Modifier = Modifier,
+    healthyRecipe: HealthyRecipe
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(sizing.md)
     ) {
         HealthyRecipeNutrientBar(
-            name = stringResource(R.string.proteinas),
-            value = healthyRecipe.proteins,
-            maxValue = 35f
+            name = stringResource(healthyRecipe.proteins.name),
+            value = healthyRecipe.proteins.value,
+            maxValue = MAX_NUTRIENT_BAR_VALUE
         )
         HealthyRecipeNutrientBar(
-            name = stringResource(R.string.carboidratos),
-            value = healthyRecipe.carbohydrates,
-            maxValue = 35f
+            name = stringResource(healthyRecipe.carbohydrates.name),
+            value = healthyRecipe.carbohydrates.value,
+            maxValue = MAX_NUTRIENT_BAR_VALUE
         )
         HealthyRecipeNutrientBar(
-            name = stringResource(R.string.acucar),
-            value = healthyRecipe.sugar,
-            maxValue = 35f
+            name = stringResource(healthyRecipe.sugar.name),
+            value = healthyRecipe.sugar.value,
+            maxValue = MAX_NUTRIENT_BAR_VALUE
         )
         HealthyRecipeNutrientBar(
-            name = stringResource(R.string.gorduras),
-            value = healthyRecipe.fat,
-            maxValue = 35f
+            name = stringResource(healthyRecipe.fat.name),
+            value = healthyRecipe.fat.value,
+            maxValue = MAX_NUTRIENT_BAR_VALUE
         )
     }
 }
@@ -157,7 +249,9 @@ fun HealthyRecipeNutrientBarList(modifier: Modifier, healthyRecipe: HealthyRecip
 private fun HealthyRecipeDetailsScreenPreview() {
     TabelaNutricionalTheme {
         HealthyRecipeDetailsScreen(
-            healthyRecipe = mockHealthyRecipes.first()
+            healthyRecipe = mockHealthyRecipes.first(),
+            onNavigateBack = {},
+            onClickFavorite = {}
         )
     }
 }

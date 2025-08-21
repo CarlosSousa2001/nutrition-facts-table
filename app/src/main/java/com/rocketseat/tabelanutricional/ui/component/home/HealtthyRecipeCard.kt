@@ -2,6 +2,7 @@ package com.rocketseat.tabelanutricional.ui.component.home
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.rocketseat.tabelanutricional.R
 import com.rocketseat.tabelanutricional.data.model.HealthyRecipe
+import com.rocketseat.tabelanutricional.data.model.mock.mockHealthyRecipes
 import com.rocketseat.tabelanutricional.ui.theme.TabelaNutricionalTheme
 import com.rocketseat.tabelanutricional.ui.theme.TabelaNutricionalTheme.sizing
 import com.rocketseat.tabelanutricional.ui.theme.Typography
@@ -30,10 +32,13 @@ import java.util.UUID
 @Composable
 fun HealthyRecipeCard(
     modifier: Modifier = Modifier,
-    healthyRecipe: HealthyRecipe
+    healthyRecipe: HealthyRecipe,
+    onClick: (selectedHealthyRecipeId: String) -> Unit
 ) {
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth().clickable {
+            onClick(healthyRecipe.id.toString())
+        }
     ) {
         Image(
             modifier = Modifier
@@ -61,7 +66,7 @@ fun HealthyRecipeCard(
                 )
 
                 Text(
-                    text = stringResource(R.string.valor_kcal, healthyRecipe.calories),
+                    text = stringResource(R.string.valor_kcal, healthyRecipe.calories.value),
                     style = Typography.bodyLarge
                 )
             }
@@ -69,12 +74,12 @@ fun HealthyRecipeCard(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(
                     R.string.g_proteinas_g_carboidratos_da_receita,
-                    healthyRecipe.proteins,
-                    healthyRecipe.carbohydrates
+                    healthyRecipe.proteins.value,
+                    healthyRecipe.carbohydrates.value
                 ),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                style = Typography.bodyLarge.copy(MaterialTheme.colorScheme.secondary)
+                style = Typography.bodyLarge.copy(MaterialTheme.colorScheme.onSecondary)
             )
         }
     }
@@ -91,16 +96,8 @@ private fun HealthyRecipeCardPreview() {
             repeat(5) {
 
                 HealthyRecipeCard(
-                    healthyRecipe = HealthyRecipe(
-                        name = "Salada de Frutas",
-                        imageRes = R.drawable.img_assorted_salad,
-                        calories = 221.15f,
-                        proteins = 13.2f,
-                        carbohydrates = 22.80f,
-                        sugar = 4.88f,
-                        fat = 5.18f,
-                        totalPortionInGrams = 240
-                    ),
+                    healthyRecipe = mockHealthyRecipes.first(),
+                    onClick = {}
                 )
             }
         }
