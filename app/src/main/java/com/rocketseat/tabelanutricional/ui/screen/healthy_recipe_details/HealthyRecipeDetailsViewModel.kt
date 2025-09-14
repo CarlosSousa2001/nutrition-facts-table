@@ -1,4 +1,4 @@
-package com.rocketseat.tabelanutricional.ui.screen.healthyRecipe_more_details
+package com.rocketseat.tabelanutricional.ui.screen.healthy_recipe_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -11,6 +11,7 @@ import com.rocketseat.tabelanutricional.core.navigation.UIArgument
 import com.rocketseat.tabelanutricional.core.navigation.UIRoute
 import com.rocketseat.tabelanutricional.data.model.mock.mockHealthyRecipes
 import com.rocketseat.tabelanutricional.ui.screen.healthy_recipe_details.HealthyRecipeDetailsScreen
+import com.rocketseat.tabelanutricional.ui.screen.healthy_recipe_details.HealthyRecipeDetailsViewModel
 import com.rocketseat.tabelanutricional.ui.screen.home.HomeScreen
 import com.rocketseat.tabelanutricional.ui.screen.home.HomeViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -22,6 +23,9 @@ fun MainNavHost(modifier: Modifier = Modifier) {
 
     val homeViewModel = koinViewModel<HomeViewModel>()
     val homeUIState by homeViewModel.uiState.collectAsStateWithLifecycle()
+
+    val heathyRecipeDetailsViewModel = koinViewModel<HealthyRecipeDetailsViewModel>()
+    val healthyRecipeDetailsUIState by heathyRecipeDetailsViewModel.uiState.collectAsStateWithLifecycle()
 
     NavHost(
         modifier = modifier,
@@ -45,9 +49,10 @@ fun MainNavHost(modifier: Modifier = Modifier) {
                 if (healthyRecipe == null) return@composable
 
                 HealthyRecipeDetailsScreen(
-                    healthyRecipe = healthyRecipe,
+                    id = healthyRecipeId,
+                    uiState = healthyRecipeDetailsUIState,
+                    onEvent = heathyRecipeDetailsViewModel::onEvent,
                     onNavigateBack = { navController.popBackStack() },
-                    onClickFavorite = {}
                 )
             }
         }

@@ -1,4 +1,4 @@
-package com.rocketseat.tabelanutricional.ui.screen.healthyRecipe_more_details
+package com.rocketseat.tabelanutricional.ui.screen.healthy_recipe_details
 
 sealed interface HealthyRecipeDetailsEvent {
     data class FindHealthyRecipeById(val id: String): HealthyRecipeDetailsEvent

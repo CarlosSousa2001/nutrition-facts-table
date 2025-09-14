@@ -1,4 +1,4 @@
-package com.rocketseat.tabelanutricional.ui.screen.healthyRecipe_more_details
+package com.rocketseat.tabelanutricional.ui.screen.healthy_recipe_details
 
 import com.rocketseat.tabelanutricional.data.model.HealthyRecipe
 

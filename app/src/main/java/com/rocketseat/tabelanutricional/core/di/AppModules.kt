@@ -12,7 +12,7 @@ import com.rocketseat.tabelanutricional.domain.usecase.GetHealthyRecipeByIdUseCa
 import com.rocketseat.tabelanutricional.domain.usecase.GetHomeContextUseCase
 import com.rocketseat.tabelanutricional.domain.usecase.IsHealthyRecipeFavorite
 import com.rocketseat.tabelanutricional.domain.usecase.UpdateHealthyRecipeIsFavoriteUseCase
-import com.rocketseat.tabelanutricional.ui.screen.healthyRecipe_more_details.HealthyRecipeDetailsViewModel
+import com.rocketseat.tabelanutricional.ui.screen.healthy_recipe_details.HealthyRecipeDetailsViewModel
 import com.rocketseat.tabelanutricional.ui.screen.home.HomeViewModel
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf

@@ -25,9 +25,13 @@ import com.rocketseat.tabelanutricional.ui.theme.TabelaNutricionalTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun LoveButton(modifier: Modifier = Modifier, onClick: (isSelected: Boolean) -> Unit) {
+fun LoveButton(
+    modifier: Modifier = Modifier,
+    isSelected: Boolean = false,
+    onClick: (isSelected: Boolean) -> Unit
+) {
 
-    var isSelected by remember { mutableStateOf(false) }
+    var isSelected by remember { mutableStateOf(isSelected) }
     var isPressed by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = isPressed) {
