@@ -5,9 +5,10 @@ import com.rocketseat.tabelanutricional.data.datasource.local.WellnessNewsLocalD
 import com.rocketseat.tabelanutricional.domain.model.HomeContent
 import com.rocketseat.tabelanutricional.domain.repository.HomeContentRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
-class HomeContextRepositoryImpl(
+class HomeContentRepositoryImpl(
     private val healthyRecipeLocalDataSource: HealthyRecipeLocalDataSource,
     private val wellnessNewsLocalDataSource: WellnessNewsLocalDataSource
 ) : HomeContentRepository {
@@ -15,6 +16,8 @@ class HomeContextRepositoryImpl(
         withContext(Dispatchers.Default) {
             val healthyRecipeList = healthyRecipeLocalDataSource.getAllHealthyRecipes()
             val wellnessNewsList = wellnessNewsLocalDataSource.getAllWellnessNews()
+
+            delay(1_000)
 
             return@withContext HomeContent(
                 wellnessNewsList = wellnessNewsList,

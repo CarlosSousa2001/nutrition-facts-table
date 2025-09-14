@@ -1,4 +1,4 @@
-package com.rocketseat.tabelanutricional.ui.screen.ui
+package com.rocketseat.tabelanutricional.ui.screen.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -33,46 +36,60 @@ import com.rocketseat.tabelanutricional.ui.theme.Typography
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    uiState: HomeUIState,
+    onEvent: (event: HomeEvent) -> Unit,
     onNavigateToDetails: (selectedHealthyRecipeId: String) -> Unit
 ) {
 
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
-        Column(
-            modifier = Modifier.padding(sizing.md)
-        ) {
-            WelcomeHeader(
-                userName = "Carlos Sousa",
-                hasNewNotification = true,
-            )
-            Spacer(modifier = Modifier.height(sizing.x2l))
-            Text(
-                text = stringResource(R.string.saude_em_foco),
-                style = Typography.headlineMedium
-            )
-            Spacer(modifier = Modifier.height(sizing.lg))
-            WellnessNewsList(
-                wellnessNewsList = mockWellnessNews,
-                cardWidth = sizing.x5l
-            )
-        }
+    LaunchedEffect(key1 = Unit) {
+        onEvent(HomeEvent.OnInit)
+    }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF2F2F2))
-                .padding(sizing.md)
-        ) {
-            Text(
-                text = stringResource(R.string.tabela_nutricional),
-                style = Typography.headlineMedium
-            )
-            Spacer(modifier = Modifier.height(sizing.lg))
-            HealthyRecipeList(
-                healthyRecipeList = mockHealthyRecipes,
-                onNavigateToDetails = onNavigateToDetails
-            )
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (uiState.isLoading)
+            CircularProgressIndicator()
+        else {
+            if (uiState.homeContent != null) {
+                Column(
+                    modifier = Modifier.padding(sizing.md)
+                ) {
+                    WelcomeHeader(
+                        userName = uiState.userName.orEmpty(),
+                        hasNewNotification = true,
+                    )
+                    Spacer(modifier = Modifier.height(sizing.x2l))
+                    Text(
+                        text = stringResource(R.string.saude_em_foco),
+                        style = Typography.headlineMedium
+                    )
+                    Spacer(modifier = Modifier.height(sizing.lg))
+                    WellnessNewsList(
+                        wellnessNewsList = uiState.homeContent.wellnessNewsList,
+                        cardWidth = sizing.x5l
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(0xFFF2F2F2))
+                        .padding(sizing.md)
+                ) {
+                    Text(
+                        text = stringResource(R.string.tabela_nutricional),
+                        style = Typography.headlineMedium
+                    )
+                    Spacer(modifier = Modifier.height(sizing.lg))
+                    HealthyRecipeList(
+                        healthyRecipeList = uiState.homeContent.healthyRecipesList,
+                        onNavigateToDetails = onNavigateToDetails
+                    )
+                }
+            }
         }
     }
 }
@@ -123,6 +140,10 @@ fun HealthyRecipeList(
 @Composable
 private fun HomeScreenPreview() {
     TabelaNutricionalTheme {
-        HomeScreen(onNavigateToDetails = {})
+        HomeScreen(
+            uiState = HomeUIState(),
+            onEvent = {},
+            onNavigateToDetails = {}
+        )
     }
 }
