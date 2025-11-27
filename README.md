@@ -17,7 +17,8 @@ Durante o desenvolvimento você pode ir além do proposto, utilizando sua criati
 
 - [Kotlin](https://kotlinlang.org/)  
 - [Jetpack Compose](https://developer.android.com/jetpack/compose)  
-- [Android Studio](https://developer.android.com/studio)  
+- [Android Studio](https://developer.android.com/studio)
+- [Clean Architecture] (#)
 
 ---
 
