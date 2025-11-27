@@ -18,13 +18,12 @@ Durante o desenvolvimento você pode ir além do proposto, utilizando sua criati
 - [Kotlin](https://kotlinlang.org/)  
 - [Jetpack Compose](https://developer.android.com/jetpack/compose)  
 - [Android Studio](https://developer.android.com/studio)
-- [Clean Architecture] (#)
 
 ---
 
 ## 📱 Sobre o projeto
 
-A aplicação apresenta uma interface simples e moderna utilizando **Jetpack Compose** para exibir os dados nutricionais.  
+A aplicação apresenta uma interface simples e moderna utilizando **Jetpack Compose** com clean architecture para exibir os dados nutricionais.  
 É um exercício prático para consolidar conceitos de UI declarativa no Android.
 
 ---
